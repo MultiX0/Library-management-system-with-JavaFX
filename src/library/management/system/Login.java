@@ -10,7 +10,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
@@ -88,13 +90,13 @@ public class Login {
 //                primaryStage.setTitle("Main Page");
 //                primaryStage.setScene(main_scene);
 
-             if (email_controller.getText().isEmpty() || password_controller.getText().isEmpty()) {
+                if (email_controller.getText().isEmpty() || password_controller.getText().isEmpty()) {
                     Alert msg = new Alert(Alert.AlertType.WARNING, "Please fill all the Fields");
                     msg.show();
                     return;
                 }
 
-            new DataBaseQueries().log_in(email_controller.getText(), password_controller.getText(),primaryStage);
+                new DataBaseQueries().log_in(email_controller.getText(), password_controller.getText(), primaryStage);
             }
         });
 
@@ -102,6 +104,43 @@ public class Login {
         GridPane.setMargin(login_btn, new Insets(15, 0, 8, 0));
 
         root.setAlignment(Pos.CENTER);
+
+        RadioButton arabic = new RadioButton("عربي");
+        RadioButton english = new RadioButton("englih");
+
+        arabic.setStyle("-fx-text-fill: #ffffff;");
+        english.setStyle("-fx-text-fill: #ffffff;");
+
+        ToggleGroup lang = new ToggleGroup();
+        lang.getToggles().add(arabic);
+        lang.getToggles().add(english);
+
+        lang.selectToggle(english);
+        EventHandler<ActionEvent> onLangChange = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent event) {
+                RadioButton selected_lang = (RadioButton) lang.getSelectedToggle();
+                if (selected_lang == arabic) {
+                    email.setText("الايميل الالكتروني ");
+                    password.setText(" كلمة المرور");
+                     text1.setText("أهلا بك في ");
+                    text2.setText("مكتبتنا");
+                    text3.setText("ليس ليدك حساب؟ ");
+                    text4.setText("سجل ألان");
+                    login_btn.setText("تسجيل الدخول");
+                } else {
+                    email.setText("Email: ");
+                    password.setText("Password: ");
+                    text1.setText("Welcome To Our ");
+                    text2.setText("Library");
+                    text3.setText("You Dont have an account? ");
+                    text4.setText("Sign Up");
+                    login_btn.setText("Login");
+                }
+            }
+        };
+        
+        arabic.setOnAction(onLangChange);
+        english.setOnAction(onLangChange);
 
         root.add(header, 0, 0, 2, 1);
         root.add(email, 0, 1);
@@ -112,6 +151,8 @@ public class Login {
         root.add(login_btn, 0, 3, 2, 1);
 
         root.add(footer, 0, 4, 2, 1);
+        root.add(arabic, 0, 5, 2, 1);
+        root.add(english, 1, 5, 2, 1);
 
         GridPane.setHalignment(login_btn, HPos.CENTER);
         GridPane.setValignment(login_btn, VPos.CENTER);
@@ -121,6 +162,11 @@ public class Login {
 
         GridPane.setHalignment(footer, HPos.CENTER);
         GridPane.setValignment(footer, VPos.CENTER);
+
+        GridPane.setHalignment(english, HPos.CENTER);
+        GridPane.setValignment(english, VPos.CENTER);
+        GridPane.setHalignment(arabic, HPos.CENTER);
+        GridPane.setValignment(arabic, VPos.CENTER);
 
         root.setVgap(15);
         root.setHgap(30);

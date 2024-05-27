@@ -1,16 +1,21 @@
 package library.management.system;
 
+import static javafx.application.Application.launch;
 import javafx.event.*;
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 
 public class StartPage {
 
-    static public BorderPane main_lib(Stage primaryStage, int user_id,String name, String email, String password) {//
+    static public Boolean isPrimary = true;
+
+    static public BorderPane main_lib(Stage primaryStage, int user_id, String name, String email, String password) {//
+
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(15, 15, 15, 15));
         root.setStyle("-fx-background-color: #1E1E1E");
@@ -53,6 +58,9 @@ public class StartPage {
         Text text1 = new Text("Welcome Dear ");
         Text text2 = new Text(name);
 
+        Label theme = !isPrimary ? new Label("Second Theme") : new Label("Primary Theme");
+        theme.setStyle("-fx-text-fill: #ffffff;");
+
         text1.setStyle("-fx-fill: #ffffff;");
         text2.setStyle("-fx-fill: #8758FF;");
 
@@ -62,44 +70,75 @@ public class StartPage {
         header.setGraphic(header_flow);
         header.setStyle("-fx-font-weight: bold;");
         header.setFont(new Font(18));
-        
-        
-        GridPane home = HomePage.get_home(primaryStage,user_id,name,email,password,text2);
+
+        header.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                text2.setStyle("-fx-fill: red;");
+
+            }
+        });
+
+        header.setOnMouseExited(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                text2.setStyle("-fx-fill: #8758FF;");
+
+            }
+        });
+
+        GridPane home = HomePage.get_home(primaryStage, user_id, name, email, password, text2);
         root.setCenter(home);////
 ////
-        
-        
 
         BorderPane.setAlignment(header, Pos.CENTER);
         BorderPane.setMargin(header, new Insets(15, 0, 0, 0));
         root.setTop(header);
+        root.setBottom(theme);
+        BorderPane.setAlignment(theme, Pos.CENTER_RIGHT);
+
         root.setLeft(menu);
-        
-        
+
+        theme.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                isPrimary = !isPrimary;
+                if (isPrimary == true) {
+                    theme.setText("Second Theme");
+                    root.setStyle("-fx-background-color: #332d1e");
+                    theme.setStyle("-fx-text-fill: green;-fx-font-weight: bold;");
+                    menu.setStyle("-fx-background-color: white; -fx-background-radius: 10px;");
+
+                } else {
+                    theme.setText("Primary Theme");
+                    root.setStyle("-fx-background-color: #1E1E1E");
+                    theme.setStyle("-fx-text-fill: #ffffff;");
+                    menu.setStyle("-fx-background-color: #2E2E2E; -fx-background-radius: 10px;");
+
+                }
+            }
+        });
+
         //buttons actions
-        
-        home_btn.setOnAction(new EventHandler<ActionEvent>(){
-            public void handle(ActionEvent event){
+        home_btn.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent event) {
                 root.setCenter(home);
             }
         });
-        
-        books_btn.setOnAction(new EventHandler<ActionEvent>(){
-            public void handle(ActionEvent event){
+
+        books_btn.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent event) {
                 BorderPane books_page = BooksPage.get_books();
                 root.setCenter(books_page);
             }//
         });
-        
-        users_btn.setOnAction(new EventHandler<ActionEvent>(){
-            public void handle(ActionEvent event){
+
+        users_btn.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent event) {
                 BorderPane users_page = UsersPage.get_users();
                 root.setCenter(users_page);
             }
         });//
-        
-        aboutUs_btn.setOnAction(new EventHandler<ActionEvent>(){
-            public void handle(ActionEvent event){
+
+        aboutUs_btn.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent event) {
                 GridPane about = AboutPage.get_about();
                 root.setCenter(about);
             }
@@ -108,4 +147,5 @@ public class StartPage {
         return root;
 
     }
+
 }

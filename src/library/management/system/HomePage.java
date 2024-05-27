@@ -1,5 +1,7 @@
 package library.management.system;
 
+import javafx.application.Application;
+import static javafx.application.Application.launch;
 import javafx.event.*;
 import javafx.geometry.*;
 import javafx.scene.Scene;
@@ -7,8 +9,21 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
+import static library.management.system.StartPage.main_lib;
 
-public class HomePage {
+public class HomePage extends Application {
+
+    public void start(Stage primaryStage) {
+        BorderPane main = main_lib(primaryStage, 1, "test", "main_lib", "main_lib");//
+
+        Scene scene = new Scene(main, 700, 400);
+
+        primaryStage.setTitle("Library Management System");
+        primaryStage.setScene(scene);
+        primaryStage.setMinWidth(950);
+        primaryStage.setMinHeight(700);
+        primaryStage.show();
+    }
 
     static public GridPane get_home(Stage primaryStage, int user_id, String name, String user_email, String user_password, Text text) {
         GridPane home = new GridPane();
@@ -80,10 +95,14 @@ public class HomePage {
                 text.setText(name_controller.getText());
                 new DataBaseQueries().update_user(user_id, email_controller.getText(), name_controller.getText(), password_controller.getText());
                 System.out.println("Pressed!");
-                
+
             }
         });
 //
         return home;
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }

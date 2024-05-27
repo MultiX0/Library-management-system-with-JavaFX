@@ -12,12 +12,13 @@ import javafx.stage.Stage;
 public class DataBaseQueries {
 
     private static final String ADD_USER = "INSERT INTO users (user_name, email, password) VALUES (?, ?, ?)";
-    private static final String UPDATE_USER = "UPDATE users SET user_name=?,email=?,password=? WHERE user_id=?";
+    private static final String UPDATE_USER = "UPDATE users SET user_name=?,email=?,password=? WHER E user_id=?";
 
     private static final String LOGGIN_USER = "SELECT * FROM users WHERE email = ? AND password = ?";
 
     private static final String GET_ALL_BOOKS = "SELECT * FROM books";
     private static final String GET_ALL_USERS = "SELECT * FROM users";
+    private static final String GET_USER_BY_ID = "SELECT * FROM users WHERE user_id=?";
 
     private static final String UPDATE_BOOK = "UPDATE books SET book_name=?,author=?,quantity=? WHERE book_id=?";
     private static final String ADD_BOOK = "INSERT INTO books (book_name, author, quantity) VALUES (?, ?, ?)";
@@ -182,6 +183,42 @@ public class DataBaseQueries {
                 userEmails.add(email);
 
             }
+
+        } catch (Exception e) {
+            Alert msg = new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage());
+            msg.show();
+        }
+    }
+    
+        public void get_user_by_id(String user_id,ObservableList<Integer> userIds, ObservableList<String> userNames, ObservableList<String> userEmails) {
+        try {
+            Connection con = connect();
+            PreparedStatement statement = con.prepareStatement(GET_USER_BY_ID);
+            statement.setInt(1, Integer.parseInt(user_id));
+
+            ResultSet resultSet = statement.executeQuery();
+
+            userIds.clear();
+            userNames.clear();
+            userEmails.clear();
+            
+            if(!resultSet.next()){
+                 Alert msg = new Alert(Alert.AlertType.ERROR, "Error: There is no user with id: " + user_id);
+            msg.show();
+            }else{
+                userIds.clear();
+                userNames.clear();
+                userEmails.clear();
+                 int id = resultSet.getInt("user_id");
+                String name = resultSet.getString("user_name");
+                String email = resultSet.getString("email");
+
+                userIds.add(id);
+                userNames.add(name);
+                userEmails.add(email);
+            }
+
+           
 
         } catch (Exception e) {
             Alert msg = new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage());

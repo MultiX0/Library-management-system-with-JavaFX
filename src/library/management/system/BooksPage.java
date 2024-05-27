@@ -57,7 +57,7 @@ public class BooksPage extends Application {
 
         Label content = new Label("In Case You Want to Add Or Update A book fill the fields");
         content.setStyle("-fx-text-fill:#ffff;-fx-font-weight: bold;");
-        content.setFont(new Font(16));
+        content.setFont(new Font("Arial",16));
 
         TextField name_field = new TextField();
         GridPane.setMargin(name_field, new Insets(0, 0, 10, 0));
